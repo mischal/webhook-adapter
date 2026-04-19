@@ -26,7 +26,7 @@ import (
 	"os"
 
 	cdevents "github.com/cdevents/sdk-go/pkg/api"
-	cdevents04 "github.com/cdevents/sdk-go/pkg/api/v04"
+	cdeventsv05 "github.com/cdevents/sdk-go/pkg/api/v05"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"gopkg.in/yaml.v3"
 )
@@ -75,7 +75,7 @@ func ValidateURL(URL string) (string, error) {
 
 func SendCDEvent(event string, messageBrokerURL string) error {
 	fmt.Println("IN SendCDEvent with event " + event)
-	cdEvent, err := cdevents04.NewFromJsonString(event)
+	cdEvent, err := cdeventsv05.NewFromJsonString(event)
 	if err != nil {
 		log.Printf("failed to create CDEvent from Json string, %v", err)
 		return err

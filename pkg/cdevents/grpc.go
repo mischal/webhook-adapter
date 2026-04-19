@@ -19,8 +19,9 @@ package cdevents
 
 import (
 	"context"
-	"github.com/cdevents/webhook-adapter/pkg/proto"
 	"net/http"
+
+	"github.com/cdevents/webhook-adapter/pkg/proto"
 )
 
 type GRPCClient struct {
@@ -28,9 +29,9 @@ type GRPCClient struct {
 }
 
 func (m *GRPCClient) TranslateEvent(event string, header http.Header) (string, error) {
-	var entries []*proto.HeaderEntry
-	var headerValues []*proto.HeaderValue
+	entries := make([]*proto.HeaderEntry, 0, len(header))
 	for key, values := range header {
+		headerValues := make([]*proto.HeaderValue, 0, len(values))
 		for _, value := range values {
 			headerValue := &proto.HeaderValue{Value: value}
 			headerValues = append(headerValues, headerValue)
@@ -56,7 +57,7 @@ type GRPCServer struct {
 	Impl EventTranslator
 }
 
-func (m *GRPCServer) TranslateEvent(ctx context.Context, req *proto.TranslateEventRequest) (*proto.TranslateEventResponse, error) {
+func (m *GRPCServer) TranslateEvent(_ context.Context, req *proto.TranslateEventRequest) (*proto.TranslateEventResponse, error) {
 	header := make(http.Header)
 	for _, entry := range req.Headers {
 		for _, value := range entry.Values {
